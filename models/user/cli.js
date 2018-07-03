@@ -15,24 +15,6 @@ let db = mongoose.connection;
 // a Box Model
 let User = require('./user');
 
-/*
-let mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/mongoose_basic');
- */
-
-//let db = mongoose.connection;
-/*
-// once the database is open
-db.once('open', function () {
-
-console.log('okay so you like that then okay.');
-
-db.close();
-
-});
- */
-
 // options for creating Days, getting Days, and Droping the database
 let options = {
 
