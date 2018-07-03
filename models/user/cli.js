@@ -102,11 +102,15 @@ let options = {
                 if (e) {
 
                     console.log('getbyname: error');
+					
                     reject(e.message)
 
                 } else {
 
                     console.log('getbyname: listing');
+					
+					console.log(users[0].say());
+					
                     resolve(users);
 
                 }
