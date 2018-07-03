@@ -1,17 +1,37 @@
+
+
 // grab mongoose
-let mongoose = require('mongoose');
+let mongoose = require('mongoose'),
+host = 'localhost',
+port = '27017',
+dbName = 'mongoose_users';
 
 // make a connection to mongoDB
-mongoose.connect('mongodb://localhost/mongoose_basic');
+mongoose.connect('mongodb://' + host + ':' + port + '/' + dbName);
 
 // ref mongoose.connection
 let db = mongoose.connection;
 
 // a Box Model
-let Day = mongoose.model('Day', {
-        date: String,
-        users: Number
-    });
+let User = require('./user');
+
+/*
+let mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/mongoose_basic');
+ */
+
+//let db = mongoose.connection;
+/*
+// once the database is open
+db.once('open', function () {
+
+console.log('okay so you like that then okay.');
+
+db.close();
+
+});
+ */
 
 // options for creating Days, getting Days, and Droping the database
 let options = {
@@ -23,17 +43,19 @@ let options = {
         return new Promise((resolve, reject) => {
 
             // default to '1/1/10' for date, and 0 for users
-            let date = process.argv[3] || '1/1/10',
+            let name = process.argv[3] || 'foo',
             users = process.argv[4] || 0,
 
             // create the day
-            day = new Day({
-                    date: date,
-                    users: users
+            user = new User({
+                    name: process.argv[3] || 'foo',
+                    password: process.argv[4] || '123',
+                    createDate: new Date(),
+                    lastOn: new Date()
                 });
 
             // save the day
-            day.save(function (e, day) {
+            user.save(function (e, day) {
 
                 if (e) {
 
@@ -42,7 +64,7 @@ let options = {
 
                 } else {
 
-                    console.log('create: saved new day');
+                    console.log('create: saved new user');
                     resolve(day);
 
                 }
@@ -80,30 +102,30 @@ let options = {
     },
 
     // get by date, or list all
-    getbydate: () => {
+    getbyname: () => {
 
         // query defaults to an empty object
         let query = {};
 
         // set date if given
         if (process.argv[3]) {
-            query.date = process.argv[3];
+            query.name = process.argv[3];
         }
 
         // return a promise
         return new Promise((resolve, reject) => {
 
-            Day.find(query, (e, days) => {
+            User.find(query, (e, users) => {
 
                 if (e) {
 
-                    console.log('getByDate: error');
+                    console.log('getbyname: error');
                     reject(e.message)
 
                 } else {
 
-                    console.log('getByDate: listing days:');
-                    resolve(days);
+                    console.log('getbyname: listing');
+                    resolve(users);
 
                 }
 
@@ -127,7 +149,7 @@ db.on('error', (e) => {
 db.once('open', function () {
 
     // default to getbydate
-    let opt = process.argv[2] || 'getbydate';
+    let opt = process.argv[2] || 'getbyname';
 
     // if we have that option...
     if (opt in options) {
