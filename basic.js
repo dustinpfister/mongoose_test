@@ -1,8 +1,17 @@
 // grab mongoose
 let mongoose = require('mongoose');
 
+let mongoURL = {
+
+    host: 'localhost',    // assuming localhist will work, change if different
+    port: 27017,          // default port change this if different
+    db: 'mongoose_basic'  // name of database
+
+};
+mongoURL.url = 'mongodb://' + mongoURL.host + ':' + mongoURL.port + '/' + mongoURL.db;
+
 // make a connection to mongoDB
-mongoose.connect('mongodb://localhost/mongoose_basic');
+mongoose.connect(mongoURL.url);
 
 // ref mongoose.connection
 let db = mongoose.connection;
