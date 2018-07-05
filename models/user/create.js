@@ -1,4 +1,4 @@
-
+// create a user
 require('./connect')().then(function (mongoose) {
 
     let db = mongoose.connection,
