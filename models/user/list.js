@@ -1,59 +1,37 @@
-
-
+// list users
 require('./connect')().then(function (mongoose) {
 
-    let db = mongoose.connection;
+    let db = mongoose.connection,
+    User = require('./user');     // the User model
 
-    // the User model
-    let User = require('./user');
-
-    let list = () => {
-
-        // return a promise
-        return new Promise((resolve, reject) => {
-
-            User.find({}, (e, users) => {
-
-                if (e) {
-
-                    reject(e.message)
-
-                } else {
-
-                    resolve(users);
-
-                }
-
-            });
-
-        });
-
-    };
-
-    list().then(function (users) {
+    User.find({}, (e, users) => {
 
         // list the users
         console.log('********** list users **********');
-        if (users.length > 0) {
+        if (e) {
 
-            users.forEach(function (user) {
-
-                console.log('name: ' + user.name + ' ; laston ' + user.lastOn + ';');
-
-            });
+            // if an error happens list the message
+            console.log(e.message);
 
         } else {
 
-            console.log('no users.');
+            if (users.length > 0) {
+
+                users.forEach(function (user) {
+
+                    console.log('name: ' + user.name + ' ; laston ' + user.lastOn + ';');
+
+                });
+
+            } else {
+
+                console.log('no users.');
+
+            }
 
         }
         console.log('********** **********');
 
-        db.close();
-
-    }).catch (function (e) {
-
-        console.log(e.message);
         db.close();
 
     });
