@@ -1,13 +1,18 @@
 
 
 // grab mongoose
-let mongoose = require('mongoose'),
-host = 'localhost',
-port = '27017',
-dbName = 'mongoose_users';
+let mongoose = require('mongoose');
+
+// the mongodb url
+let mongoURL = {
+    host: 'localhost', // assuming localhist will work, change if different
+    port: 27017, // default port change this if different
+    db: 'mongoose_users' // name of database
+};
+mongoURL.url = 'mongodb://' + mongoURL.host + ':' + mongoURL.port + '/' + mongoURL.db;
 
 // make a connection to mongoDB
-mongoose.connect('mongodb://' + host + ':' + port + '/' + dbName);
+mongoose.connect(mongoURL.url);
 
 // ref mongoose.connection
 let db = mongoose.connection;
@@ -102,15 +107,17 @@ let options = {
                 if (e) {
 
                     console.log('getbyname: error');
-					
+
                     reject(e.message)
 
                 } else {
 
                     console.log('getbyname: listing');
-					
-					console.log(users[0].say());
-					
+
+                    if (users.length > 0) {
+                        console.log(users[0].say());
+                    }
+
                     resolve(users);
 
                 }
