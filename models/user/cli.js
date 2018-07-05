@@ -1,5 +1,3 @@
-
-
 // grab mongoose
 let mongoose = require('mongoose');
 

@@ -1,72 +1,66 @@
-// grab mongoose
-let mongoose = require('mongoose'),
-host = 'localhost',
-port = '27017',
-dbName = 'mongoose_users';
 
-// make a connection to mongoDB
-mongoose.connect('mongodb://' + host + ':' + port + '/' + dbName);
 
-// ref mongoose.connection
-let db = mongoose.connection;
+require('./connect')().then(function (mongoose) {
 
-// the User model
-let User = require('./user');
+    let db = mongoose.connection;
 
-let list = () => {
+    // the User model
+    let User = require('./user');
 
-    // query defaults to an empty object
-    let query = {};
+    let list = () => {
 
-    // set date if given
-    if (process.argv[3]) {
-        query.name = process.argv[3];
-    }
+        // return a promise
+        return new Promise((resolve, reject) => {
 
-    // return a promise
-    return new Promise((resolve, reject) => {
+            User.find({}, (e, users) => {
 
-        User.find(query, (e, users) => {
+                if (e) {
 
-            if (e) {
+                    reject(e.message)
 
-                reject(e.message)
+                } else {
 
-            } else {
+                    resolve(users);
 
-                resolve(users);
+                }
 
-            }
+            });
 
         });
 
-    });
+    };
 
-};
-
-// once the database is open
-db.once('open', function () {
-
-    list().then((users) => {
+    list().then(function (users) {
 
         // list the users
         console.log('********** list users **********');
-        users.forEach(function (user) {
+        if (users.length > 0) {
 
-            console.log('name: ' + user.name + ' ; laston ' + user.lastOn + ';');
+            users.forEach(function (user) {
 
-        });
+                console.log('name: ' + user.name + ' ; laston ' + user.lastOn + ';');
+
+            });
+
+        } else {
+
+            console.log('no users.');
+
+        }
         console.log('********** **********');
 
         db.close();
 
-    }).catch ((e) => {
+    }).catch (function (e) {
 
-        console.log('error');
         console.log(e.message);
-
         db.close();
 
     });
+
+}).catch (function (e) {
+
+    console.log('ahh man.');
+    console.log(e.message);
 
 });
