@@ -1,3 +1,43 @@
+
+require('./connect')().then(function (mongoose) {
+
+    let db = mongoose.connection,
+    User = require('./user'),
+
+    // create the user
+    user = new User({
+            name: process.argv[2] || 'foo',
+            password: process.argv[3] || '123',
+            createDate: new Date(),
+            lastOn: new Date()
+        });
+
+    // save the day
+    user.save(function (e, day) {
+
+        if (e) {
+
+            console.log('create: error');
+            db.close();
+
+        } else {
+
+            console.log('create: saved new user');
+            console.log(day);
+            db.close();
+
+        }
+
+    });
+
+}).catch (function (e) {
+
+    console.log('ahh man.');
+    console.log(e.message);
+
+});
+
+/*
 // grab mongoose
 let mongoose = require('mongoose'),
 host = 'localhost',
@@ -15,53 +55,54 @@ let User = require('./user');
 
 let create = () => {
 
-    // return a promise
-    return new Promise((resolve, reject) => {
+// return a promise
+return new Promise((resolve, reject) => {
 
-        // create the day
-        let user = new User({
-                name: process.argv[2] || 'foo',
-                password: process.argv[3] || '123',
-                createDate: new Date(),
-                lastOn: new Date()
-            });
+// create the day
+let user = new User({
+name: process.argv[2] || 'foo',
+password: process.argv[3] || '123',
+createDate: new Date(),
+lastOn: new Date()
+});
 
-        // save the day
-        user.save(function (e, day) {
+// save the day
+user.save(function (e, day) {
 
-            if (e) {
+if (e) {
 
-                console.log('create: error');
-                reject(e.message);
+console.log('create: error');
+reject(e.message);
 
-            } else {
+} else {
 
-                console.log('create: saved new user');
-                resolve(day);
+console.log('create: saved new user');
+resolve(day);
 
-            }
+}
 
-        });
+});
 
-    });
+});
 
 };
 
 // once the database is open
 db.once('open', function () {
 
-    create().then(() => {
+create().then(() => {
 
-        console.log('new user created');
-        db.close();
+console.log('new user created');
+db.close();
 
-    }).catch ((e) => {
+}).catch ((e) => {
 
-        console.log('error');
-        console.log(e.message);
+console.log('error');
+console.log(e.message);
 
-        db.close();
-
-    });
+db.close();
 
 });
+
+});
+*/

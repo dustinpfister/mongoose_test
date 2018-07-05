@@ -1,5 +1,4 @@
-
-
+// connect to mongodb with mongoose, and then return mongoose
 module.exports = function (options, cb) {
 
     // grab mongoose
@@ -33,7 +32,6 @@ module.exports = function (options, cb) {
 
             db.close();
             reject(e.message);
-
 
         });
 
